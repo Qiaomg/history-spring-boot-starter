@@ -1,0 +1,8 @@
+D:\SP\history-spring-boot-starter\src\main\java\net\shopin\utils\history\HistoryProperties.java
+D:\SP\history-spring-boot-starter\src\main\java\net\shopin\utils\history\HistoryRecordUtils.java
+D:\SP\history-spring-boot-starter\src\main\java\net\shopin\utils\history\interceptors\FullSqlnterceptor.java
+D:\SP\history-spring-boot-starter\src\main\java\net\shopin\utils\history\annotation\History.java
+D:\SP\history-spring-boot-starter\src\main\java\net\shopin\utils\history\interceptors\HistoryTableInterceptor.java
+D:\SP\history-spring-boot-starter\src\main\java\net\shopin\utils\history\FullSqlAutoConfiguration.java
+D:\SP\history-spring-boot-starter\src\main\java\net\shopin\utils\history\HistoryTableAutoConfiguration.java
+D:\SP\history-spring-boot-starter\src\main\java\net\shopin\utils\history\SqlConvertDto.java

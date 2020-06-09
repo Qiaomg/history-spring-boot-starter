@@ -1,0 +1,8 @@
+net\shopin\utils\history\interceptors\FullSqlnterceptor.class
+net\shopin\utils\history\SqlConvertDto.class
+net\shopin\utils\history\HistoryProperties.class
+net\shopin\utils\history\HistoryRecordUtils.class
+net\shopin\utils\history\annotation\History.class
+net\shopin\utils\history\HistoryTableAutoConfiguration.class
+META-INF\spring-configuration-metadata.json
+net\shopin\utils\history\interceptors\HistoryTableInterceptor.class

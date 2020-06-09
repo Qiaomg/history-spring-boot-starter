@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "history.config",
+      "type": "net.shopin.utils.history.HistoryProperties",
+      "sourceType": "net.shopin.utils.history.HistoryProperties"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
