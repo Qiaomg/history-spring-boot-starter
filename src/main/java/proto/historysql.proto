@@ -1,0 +1,25 @@
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.history";
+option java_outer_classname = "HistoryRecord";
+option objc_class_prefix = "HLW";
+
+package historyrecord;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc sendOptSql (RequestOperateSql) returns (ResponseOperateSql) {}
+}
+
+// The request message containing the user's name.
+message RequestOperateSql {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message ResponseOperateSql {
+  string message = 1;
+}
