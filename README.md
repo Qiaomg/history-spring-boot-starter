@@ -19,3 +19,4 @@
 ### 添加mybatis plus 拦截器
  @Autowired
  private HistoryTableInterceptor historyTableInterceptor;
+### 添加实体类注解@Hisotry("HistoryTableName")
