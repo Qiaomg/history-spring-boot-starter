@@ -21,7 +21,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 
 /**
- * @title: MybatisQueryInterceptor
+ * @title: FullSqlnterceptor
  * @description: 拦截查询方法 打印sql  输出完整sql
  * @author: qmg
  * @date: 2020/1/14 13:00
@@ -29,8 +29,6 @@ import java.util.regex.Matcher;
  */
 @Component
 @Intercepts({
-//        @Signature(type = Executor.class, method = "update", args = {MappedStatement.class,
-//                Object.class}),
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class,
                 Object.class, RowBounds.class, ResultHandler.class})})
 public class FullSqlnterceptor implements Interceptor {
@@ -47,7 +45,6 @@ public class FullSqlnterceptor implements Interceptor {
             BoundSql boundSql = mappedStatement.getBoundSql(parameter); // BoundSql就是封装myBatis最终产生的sql类
             Configuration configuration = mappedStatement.getConfiguration(); // 获取节点的配置
             String sql = getSql(configuration, boundSql); // 获取到最终的sql语句
-//            log.info("【执行SQL】{}",sql);
             System.out.println("【执行SQL】{"+sql+"}");
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,7 +61,9 @@ public class FullSqlnterceptor implements Interceptor {
         return str.toString();
     }
 
-    // 如果参数是String，则添加单引号， 如果是日期，则转换为时间格式器并加单引号； 对参数是null和不是null的情况作了处理
+    /**
+     * 如果参数是String，则添加单引号， 如果是日期，则转换为时间格式器并加单引号； 对参数是null和不是null的情况作了处理
+     */
     private static String getParameterValue(Object obj) {
         String value = null;
         if (obj instanceof String) {
@@ -130,8 +129,6 @@ public class FullSqlnterceptor implements Interceptor {
 
     @Override
     public void setProperties(Properties properties) {
-
-//        log.info("setProperties");
     }
 
 

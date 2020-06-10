@@ -49,7 +49,6 @@ public class HistoryTableInterceptor implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         Object obj;
-//        long startTime = System.currentTimeMillis();
         Statement stmt=null;
         String sql="";
         String sqlType="";
@@ -63,79 +62,36 @@ public class HistoryTableInterceptor implements Interceptor {
                 }
                 sql = ((com.mysql.cj.jdbc.ClientPreparedStatement) stmt).asSql().replaceAll("\\s+", " ");
                 sqlType = sql.substring(0, 6).toUpperCase();
-
                 System.out.println("【执行SQL】:" + sql);
-//                log.info("【执行SQL】:" + sql);
-
+                /**
+                 * 只记录 update操作和 delete操作。
+                 * 对于select 操作 无需记录history
+                 *  对于insert 操作 初始创建 不重复记录
+                 */
                 if (HistoryProperties.UPDATE.equals(sqlType) || HistoryProperties.DELETE.equals(sqlType)) {
-                    saveHistory( "system" ,stmt, sql, sqlType);
+                    HistoryRecordUtils.saveHistory( "system" ,stmt, sql, sqlType);
                 }
             }
-
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally {
-            obj = invocation.proceed();
-        }
-        try {
-            if(st instanceof DruidPooledPreparedStatement) {
-                if (HistoryProperties.INSERT.equals(sqlType)) {
-                    saveHistory("system", stmt, sql, sqlType);
-                }
-//                long endTime = System.currentTimeMillis();
-//                log.info("拦截器 耗时：{}", (endTime - startTime));
-            }
-        } catch (Exception e)
-        {
+        }catch (Exception e){
             e.printStackTrace();
         }finally {
+            obj = invocation.proceed();
             return obj;
         }
+        //如果要记录insert操作 使用下方代码段
+//        try {
+//            if(st instanceof DruidPooledPreparedStatement) {
+//                if (HistoryProperties.INSERT.equals(sqlType)) {
+//                    saveHistory("system", stmt, sql, sqlType);
+//                }
+//            }
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }finally {
+//            return obj;
+//        }
 
     }
-
-    /**
-     * 业务代码
-     * 1、判断操作类型
-     * insert 解析全部sql          ->  insertHistory
-     * delete 解析where条件部分    ->  根据条件查询数据 insertHistory
-     * update 解析where条件部分    ->  根据条件查询数据 insertHistory
-     * 2、解析SQL
-     * 获得sql操作的数据库表
-     * 获取数据库表对应的实体类
-     * 获得实体类上的注解 @History
-     * SqlCommandType sqlType
-     */
-    public static void saveHistory(String creater,Statement stmt, String sql, String type) {
-//        long startTime = System.currentTimeMillis();
-        try {
-            sql = sql.replaceAll("[\\s]+", " ");
-            SqlConvertDto sqlConvertDto;
-
-            if (HistoryProperties.INSERT.equals(type)) {
-                sqlConvertDto = HistoryRecordUtils.splitSqlInsert(sql);
-            } else if (HistoryProperties.DELETE.equals(type)) {
-                sqlConvertDto = HistoryRecordUtils.splitSqlDelete(sql);
-            } else if (HistoryProperties.UPDATE.equals(type)) {
-                sqlConvertDto = HistoryRecordUtils.splitSqlUpdate(sql);
-            } else {
-//                log.info("执行类型为{}的sql,不处理，", type);
-                return;
-            }
-            if(sqlConvertDto.getTableName() == null){
-                return;
-            }
-            sqlConvertDto.setCreater(creater);
-            HistoryRecordUtils.selectInfoToHistory(stmt, sqlConvertDto);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
-//        long endTime = System.currentTimeMillis();
-//        log.info("saveHistory 耗时：{}", (endTime - startTime));
-    }
-
 
     @Override
     public Object plugin(Object target) {
@@ -144,8 +100,6 @@ public class HistoryTableInterceptor implements Interceptor {
 
     @Override
     public void setProperties(Properties properties) {
-
-//        log.info("setProperties");
     }
 
 }

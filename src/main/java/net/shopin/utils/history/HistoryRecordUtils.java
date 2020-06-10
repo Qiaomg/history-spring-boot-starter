@@ -6,6 +6,7 @@ import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlDeleteStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlInsertStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlUpdateStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
+import net.shopin.grpc.HistoryRecordClient;
 import net.shopin.utils.history.annotation.History;
 import org.reflections.Reflections;
 import org.springframework.util.StringUtils;
@@ -19,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * @title: HistoryEntityBeanPostProcessor
+ * @title: HistoryRecordUtils
  * @description: bean后置处理器
  * @author: qmg
  * @date: 2019/12/14 12:15
@@ -53,6 +54,43 @@ public class HistoryRecordUtils {
         return ENTITY_MAP.get(key);
     }
 
+
+
+    /**
+     * 业务代码
+     * 1、判断操作类型
+     * insert 解析全部sql          ->  insertHistory
+     * delete 解析where条件部分    ->  根据条件查询数据 insertHistory
+     * update 解析where条件部分    ->  根据条件查询数据 insertHistory
+     * 2、解析SQL
+     * 获得sql操作的数据库表
+     * 获取数据库表对应的实体类
+     * 获得实体类上的注解 @History
+     * SqlCommandType sqlType
+     */
+    public static void saveHistory(String creater,Statement stmt, String sql, String type) {
+        try {
+            sql = sql.replaceAll("[\\s]+", " ");
+            SqlConvertDto sqlConvertDto;
+
+            if (HistoryProperties.INSERT.equals(type)) {
+                sqlConvertDto = HistoryRecordUtils.splitSqlInsert(sql);
+            } else if (HistoryProperties.DELETE.equals(type)) {
+                sqlConvertDto = HistoryRecordUtils.splitSqlDelete(sql);
+            } else if (HistoryProperties.UPDATE.equals(type)) {
+                sqlConvertDto = HistoryRecordUtils.splitSqlUpdate(sql);
+            } else {
+                return;
+            }
+            if(sqlConvertDto.getTableName() == null){
+                return;
+            }
+            sqlConvertDto.setCreater(creater);
+            HistoryRecordUtils.selectInfoToHistory(stmt, sqlConvertDto);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    }
     /**
      * 解析insert sql
      * TODO mybatis执行的sql有这种情况吗?  自定义insert sql 暂不考虑(既然使用了mybatis/plus 不需要手写insert sql)!
@@ -140,6 +178,8 @@ public class HistoryRecordUtils {
      * @param sqlConvertDto
      */
     public static void selectInfoToHistory(Statement stmt,SqlConvertDto sqlConvertDto)throws Throwable  {
+
+
         // 配置druid连接时使用filters: stat配置
         if (stmt instanceof PreparedStatementProxyImpl) {
             stmt = ((PreparedStatementProxyImpl) stmt).getRawObject();
@@ -237,8 +277,12 @@ public class HistoryRecordUtils {
                 ps1.close();
             }
         }
+        sendRpcToServer(insertSql);
     }
 
+    public static void sendRpcToServer(String insertSql){
+        HistoryRecordClient.getInstance().greet(insertSql);
+    }
 
     /**
      * 当前日期 格式 yyyy-MM-dd HH:mm:ss
@@ -251,4 +295,18 @@ public class HistoryRecordUtils {
         }
     }
 
+//    public static void main(String[] args) {
+//        HistoryRecordClient client = HistoryRecordClient.getInstance();;
+//        try {
+//            client.greet("123");
+//        }  finally {
+//            try {
+//                client.shutdown();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//
+//    }
 }

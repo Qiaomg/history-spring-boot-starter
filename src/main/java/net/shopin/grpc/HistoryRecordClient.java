@@ -6,6 +6,7 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.history.GreeterGrpc;
 import io.grpc.history.RequestOperateSql;
 import io.grpc.history.ResponseOperateSql;
+import net.shopin.utils.history.interceptors.HistoryTableInterceptor;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -19,11 +20,12 @@ import java.util.logging.Logger;
  * @version: V1.0
  */
 public class HistoryRecordClient {
-
-    private final ManagedChannel channel;
-    private final GreeterGrpc.GreeterBlockingStub blockingStub;
     private static final Logger logger = Logger.getLogger(HistoryRecordClient.class.getName());
+    private static ManagedChannel channel = null;
+    private static GreeterGrpc.GreeterBlockingStub blockingStub =null;
 
+    private volatile static HistoryRecordClient client;
+    private HistoryRecordClient(){}
     public HistoryRecordClient(String host, int port){
         channel = ManagedChannelBuilder.forAddress(host,port)
                 .usePlaintext(true)
@@ -32,12 +34,27 @@ public class HistoryRecordClient {
         blockingStub = GreeterGrpc.newBlockingStub(channel);
     }
 
+    /**
+     * 单例 双检锁模式
+     * @return HistoryTableInterceptor
+     */
+    public static HistoryRecordClient getInstance(){
+        if(client == null){
+            synchronized (HistoryTableInterceptor.class){
+                if(client == null){
+                    System.out.println("init HistoryTableInterceptor");
+                    client = new HistoryRecordClient("127.0.0.1",50051);
+                }
+            }
+        }
+        return client;
+    }
 
     public void shutdown() throws InterruptedException {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    public  void greet(String name){
+    public void greet(String name){
         RequestOperateSql request = RequestOperateSql.newBuilder().setName(name).build();
         ResponseOperateSql response;
         try{
@@ -48,21 +65,5 @@ public class HistoryRecordClient {
             return;
         }
         logger.info("Message from gRPC-Server: "+response.getMessage());
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        HistoryRecordClient client = new HistoryRecordClient("127.0.0.1",50051);
-        try{
-            String user = "world";
-            if (args.length > 0){
-                user = args[0];
-            }
-            for (int i = 0; i <100 ; i++) {
-                client.greet(user + ":" + i);
-            }
-
-        }finally {
-            client.shutdown();
-        }
     }
 }

@@ -1,18 +1,10 @@
 package io.grpc.history;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
-import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
-import static io.grpc.stub.ClientCalls.asyncClientStreamingCall;
-import static io.grpc.stub.ClientCalls.asyncServerStreamingCall;
 import static io.grpc.stub.ClientCalls.asyncUnaryCall;
-import static io.grpc.stub.ClientCalls.blockingServerStreamingCall;
 import static io.grpc.stub.ClientCalls.blockingUnaryCall;
 import static io.grpc.stub.ClientCalls.futureUnaryCall;
-import static io.grpc.stub.ServerCalls.asyncBidiStreamingCall;
-import static io.grpc.stub.ServerCalls.asyncClientStreamingCall;
-import static io.grpc.stub.ServerCalls.asyncServerStreamingCall;
 import static io.grpc.stub.ServerCalls.asyncUnaryCall;
-import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
 import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 
 /**
@@ -30,30 +22,30 @@ public final class GreeterGrpc {
   public static final String SERVICE_NAME = "historyrecord.Greeter";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<io.grpc.history.RequestOperateSql,
-      io.grpc.history.ResponseOperateSql> getSendOptSqlMethod;
+  private static volatile io.grpc.MethodDescriptor<RequestOperateSql,
+      ResponseOperateSql> getSendOptSqlMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "sendOptSql",
-      requestType = io.grpc.history.RequestOperateSql.class,
-      responseType = io.grpc.history.ResponseOperateSql.class,
+      requestType = RequestOperateSql.class,
+      responseType = ResponseOperateSql.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<io.grpc.history.RequestOperateSql,
-      io.grpc.history.ResponseOperateSql> getSendOptSqlMethod() {
-    io.grpc.MethodDescriptor<io.grpc.history.RequestOperateSql, io.grpc.history.ResponseOperateSql> getSendOptSqlMethod;
+  public static io.grpc.MethodDescriptor<RequestOperateSql,
+      ResponseOperateSql> getSendOptSqlMethod() {
+    io.grpc.MethodDescriptor<RequestOperateSql, ResponseOperateSql> getSendOptSqlMethod;
     if ((getSendOptSqlMethod = GreeterGrpc.getSendOptSqlMethod) == null) {
       synchronized (GreeterGrpc.class) {
         if ((getSendOptSqlMethod = GreeterGrpc.getSendOptSqlMethod) == null) {
-          GreeterGrpc.getSendOptSqlMethod = getSendOptSqlMethod = 
-              io.grpc.MethodDescriptor.<io.grpc.history.RequestOperateSql, io.grpc.history.ResponseOperateSql>newBuilder()
+          GreeterGrpc.getSendOptSqlMethod = getSendOptSqlMethod =
+              io.grpc.MethodDescriptor.<RequestOperateSql, ResponseOperateSql>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
                   "historyrecord.Greeter", "sendOptSql"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.history.RequestOperateSql.getDefaultInstance()))
+                  RequestOperateSql.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.history.ResponseOperateSql.getDefaultInstance()))
+                  ResponseOperateSql.getDefaultInstance()))
                   .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("sendOptSql"))
                   .build();
           }
@@ -97,19 +89,19 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public void sendOptSql(io.grpc.history.RequestOperateSql request,
-        io.grpc.stub.StreamObserver<io.grpc.history.ResponseOperateSql> responseObserver) {
+    public void sendOptSql(RequestOperateSql request,
+                           io.grpc.stub.StreamObserver<ResponseOperateSql> responseObserver) {
       asyncUnimplementedUnaryCall(getSendOptSqlMethod(), responseObserver);
     }
 
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+    @Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             getSendOptSqlMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                io.grpc.history.RequestOperateSql,
-                io.grpc.history.ResponseOperateSql>(
+                RequestOperateSql,
+                ResponseOperateSql>(
                   this, METHODID_SEND_OPT_SQL)))
           .build();
     }
@@ -130,7 +122,7 @@ public final class GreeterGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected GreeterStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       return new GreeterStub(channel, callOptions);
@@ -141,8 +133,8 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public void sendOptSql(io.grpc.history.RequestOperateSql request,
-        io.grpc.stub.StreamObserver<io.grpc.history.ResponseOperateSql> responseObserver) {
+    public void sendOptSql(RequestOperateSql request,
+                           io.grpc.stub.StreamObserver<ResponseOperateSql> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getSendOptSqlMethod(), getCallOptions()), request, responseObserver);
     }
@@ -163,7 +155,7 @@ public final class GreeterGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected GreeterBlockingStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       return new GreeterBlockingStub(channel, callOptions);
@@ -174,7 +166,7 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public io.grpc.history.ResponseOperateSql sendOptSql(io.grpc.history.RequestOperateSql request) {
+    public ResponseOperateSql sendOptSql(RequestOperateSql request) {
       return blockingUnaryCall(
           getChannel(), getSendOptSqlMethod(), getCallOptions(), request);
     }
@@ -195,7 +187,7 @@ public final class GreeterGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected GreeterFutureStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       return new GreeterFutureStub(channel, callOptions);
@@ -206,8 +198,8 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public com.google.common.util.concurrent.ListenableFuture<io.grpc.history.ResponseOperateSql> sendOptSql(
-        io.grpc.history.RequestOperateSql request) {
+    public com.google.common.util.concurrent.ListenableFuture<ResponseOperateSql> sendOptSql(
+        RequestOperateSql request) {
       return futureUnaryCall(
           getChannel().newCall(getSendOptSqlMethod(), getCallOptions()), request);
     }
@@ -228,21 +220,21 @@ public final class GreeterGrpc {
       this.methodId = methodId;
     }
 
-    @java.lang.Override
-    @java.lang.SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_SEND_OPT_SQL:
-          serviceImpl.sendOptSql((io.grpc.history.RequestOperateSql) request,
-              (io.grpc.stub.StreamObserver<io.grpc.history.ResponseOperateSql>) responseObserver);
+          serviceImpl.sendOptSql((RequestOperateSql) request,
+              (io.grpc.stub.StreamObserver<ResponseOperateSql>) responseObserver);
           break;
         default:
           throw new AssertionError();
       }
     }
 
-    @java.lang.Override
-    @java.lang.SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
@@ -256,12 +248,12 @@ public final class GreeterGrpc {
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     GreeterBaseDescriptorSupplier() {}
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return io.grpc.history.HistoryRecord.getDescriptor();
+      return HistoryRecord.getDescriptor();
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.ServiceDescriptor getServiceDescriptor() {
       return getFileDescriptor().findServiceByName("Greeter");
     }
@@ -281,7 +273,7 @@ public final class GreeterGrpc {
       this.methodName = methodName;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.MethodDescriptor getMethodDescriptor() {
       return getServiceDescriptor().findMethodByName(methodName);
     }
