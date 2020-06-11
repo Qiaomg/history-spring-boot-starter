@@ -1,10 +1,9 @@
-package net.shopin.utils.history.interceptors;
+package net.shopin.history.interceptors;
 
 import com.alibaba.druid.pool.DruidPooledPreparedStatement;
 import com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl;
-import net.shopin.utils.history.HistoryRecordUtils;
-import net.shopin.utils.history.HistoryProperties;
-import net.shopin.utils.history.SqlConvertDto;
+import net.shopin.utils.HistoryRecordUtils;
+import net.shopin.history.properties.HistoryProperties;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.plugin.*;
 

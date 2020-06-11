@@ -1,4 +1,4 @@
-package net.shopin.utils.history;
+package net.shopin.utils;
 
 import com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl;
 import com.alibaba.druid.sql.ast.SQLStatement;
@@ -6,8 +6,10 @@ import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlDeleteStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlInsertStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlUpdateStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
-import net.shopin.grpc.HistoryRecordClient;
-import net.shopin.utils.history.annotation.History;
+import net.shopin.grpc.GRpcClient;
+import net.shopin.history.annotation.History;
+import net.shopin.history.entity.SqlConvertDto;
+import net.shopin.history.properties.HistoryProperties;
 import org.reflections.Reflections;
 import org.springframework.util.StringUtils;
 import java.sql.*;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 
 /**
@@ -27,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version: V1.0
  */
 public class HistoryRecordUtils {
+    private static final Logger logger = Logger.getLogger(HistoryRecordUtils.class.getName());
     private static final String DATE_PATTON_3 = "yyyy-MM-dd HH:mm:ss";
     private static Map<String, String> ENTITY_MAP = new ConcurrentHashMap<String, String>();
 
@@ -263,8 +267,7 @@ public class HistoryRecordUtils {
         insertSqlStr.append(" VALUES ");
         insertSqlStr.append("(" + valStr.toString() + ") ");
         String insertSql =insertSqlStr.toString().replaceAll("[\\s]+", " ");
-//        log.info("拦截器执行【{}】",insertSql);
-        System.out.println("拦截器执行【"+insertSql+"】");
+        logger.info("拦截器执行【"+insertSql+"】");
         //保存数据
         Connection conn1 = stmt.getConnection();
 
@@ -277,11 +280,13 @@ public class HistoryRecordUtils {
                 ps1.close();
             }
         }
+
         sendRpcToServer(insertSql);
     }
 
     public static void sendRpcToServer(String insertSql){
-        HistoryRecordClient.getInstance().greet(insertSql);
+        logger.info("rpc client: "+insertSql);
+        GRpcClient.getInstance().greet(insertSql);
     }
 
     /**
@@ -296,7 +301,7 @@ public class HistoryRecordUtils {
     }
 
 //    public static void main(String[] args) {
-//        HistoryRecordClient client = HistoryRecordClient.getInstance();;
+//        GRpcClient client = GRpcClient.getInstance();;
 //        try {
 //            client.greet("123");
 //        }  finally {

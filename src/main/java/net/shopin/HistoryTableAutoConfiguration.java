@@ -1,11 +1,11 @@
-package net.shopin.utils.history;
+package net.shopin;
 
-import net.shopin.utils.history.interceptors.HistoryTableInterceptor;
+import net.shopin.history.interceptors.HistoryTableInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @title: net.shopin.utils.history.autoconfiguration.HistoryStarterAutoConfiguration
+ * @title: HistoryStarterAutoConfiguration
  * @description: 历史表拦截器 自动配置
  * @author: qiaomg
  * @date: 2020/6/8 10:16

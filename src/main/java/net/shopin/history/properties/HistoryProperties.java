@@ -1,4 +1,4 @@
-package net.shopin.utils.history;
+package net.shopin.history.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

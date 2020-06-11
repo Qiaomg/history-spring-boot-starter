@@ -1,4 +1,4 @@
-package net.shopin.utils.history.interceptors;
+package net.shopin.history.interceptors;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;

@@ -1,4 +1,4 @@
-package net.shopin.utils.history;
+package net.shopin.history.entity;
 
 
 import java.util.Arrays;

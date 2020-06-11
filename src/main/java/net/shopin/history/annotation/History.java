@@ -1,4 +1,4 @@
-package net.shopin.utils.history.annotation;
+package net.shopin.history.annotation;
 
 /**
  * @title: History
