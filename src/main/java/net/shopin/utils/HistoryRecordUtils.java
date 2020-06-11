@@ -7,6 +7,7 @@ import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlInsertStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlUpdateStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import net.shopin.grpc.GRpcClient;
+import net.shopin.grpc.GrpcMsg;
 import net.shopin.history.annotation.History;
 import net.shopin.history.entity.SqlConvertDto;
 import net.shopin.history.properties.HistoryProperties;
@@ -281,12 +282,22 @@ public class HistoryRecordUtils {
             }
         }
 
-        sendRpcToServer(insertSql);
+        sendRpcToServer(insertSql,HistoryProperties.getServerName(),sqlConvertDto.getHistoryTableName());
     }
 
-    public static void sendRpcToServer(String insertSql){
-        logger.info("rpc client: "+insertSql);
-        GRpcClient.getInstance().greet(insertSql);
+    /**
+     * 发送gGpc 消息到 server端
+     * @param optSql  执行sql
+     * @param serverName
+     * @param tableName
+     */
+    public static void sendRpcToServer(String optSql,String serverName, String tableName){
+        GrpcMsg msg = new GrpcMsg();
+        msg.setOptSql(optSql);
+        msg.setTableName(tableName);
+        msg.setServerName(serverName);
+        logger.info("rpc client: ==> " + msg.toString());
+        GRpcClient.getInstance().greet(msg.toJsonString());
     }
 
     /**

@@ -13,10 +13,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "history.config")
 public class HistoryProperties {
-    public static String entityPath;
     public static final String UPDATE = "UPDATE";
     public static final String DELETE = "DELETE";
     public static final String INSERT = "INSERT";
+
+    public static String entityPath;
+    public static String serverName;
+
+
+    public static String getServerName() {
+        return serverName;
+    }
+
+    public static void setServerName(String serverName) {
+        HistoryProperties.serverName = serverName;
+    }
 
     public static String getEntityPath() {
         return entityPath;
