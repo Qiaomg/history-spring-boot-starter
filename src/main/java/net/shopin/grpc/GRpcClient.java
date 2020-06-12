@@ -62,16 +62,16 @@ public class GRpcClient {
      * 发送数据
      * @param name 数据包内容 格式：xxx
      */
-    public void greet(String name){
+    public String greet(String name){
         RequestOperateSql request = RequestOperateSql.newBuilder().setName(name).build();
         ResponseOperateSql response;
         try{
             response = blockingStub.sendOptSql(request);
-        } catch (StatusRuntimeException e)
-        {
-            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-            return;
+        } catch (StatusRuntimeException e){
+            logger.log(Level.WARNING, "发送失败：" + e.getStatus());
+            return "";
         }
         logger.info("rpc server: "+response.getMessage());
+        return response.getMessage();
     }
 }

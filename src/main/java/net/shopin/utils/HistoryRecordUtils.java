@@ -8,6 +8,7 @@ import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlUpdateStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import net.shopin.grpc.GRpcClient;
 import net.shopin.grpc.GrpcMsg;
+import net.shopin.grpc.GrpcTypeEnum;
 import net.shopin.history.annotation.History;
 import net.shopin.history.entity.SqlConvertDto;
 import net.shopin.history.properties.HistoryProperties;
@@ -21,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
+
+import static net.shopin.grpc.GrpcTypeEnum.*;
 
 
 /**
@@ -222,7 +225,6 @@ public class HistoryRecordUtils {
         selectSqlStr.append(whereStr);
         String selectSql =selectSqlStr.toString().replaceAll("[\\s]+", " ");
         System.out.println("拦截器执行【"+ selectSql+"】");
-//        log.info("拦截器执行【{}】",selectSql);
         //获取操作结果集
         Map<String,Object> rsmap = new HashMap<String,Object>();
         Connection conn = stmt.getConnection();
@@ -244,7 +246,6 @@ public class HistoryRecordUtils {
         }
 
         if(rsmap.size() <= 0){
-//            log.info("sql执行未改变任何值");
             System.out.println("sql执行未改变任何值");
             return;
         }
@@ -271,7 +272,6 @@ public class HistoryRecordUtils {
         logger.info("拦截器执行【"+insertSql+"】");
         //保存数据
         Connection conn1 = stmt.getConnection();
-
         PreparedStatement ps1 = null;
         try {
             ps1 = conn1.prepareStatement(insertSql);
@@ -281,8 +281,29 @@ public class HistoryRecordUtils {
                 ps1.close();
             }
         }
-
-        sendRpcToServer(insertSql,HistoryProperties.getServerName(),sqlConvertDto.getHistoryTableName());
+        String res = sendRpcToServer(insertSql,HistoryProperties.getServerName(),sqlConvertDto.getHistoryTableName());
+        if(CREATE.equals(res)){
+            //查询建表语句
+            Connection conn2 = stmt.getConnection();
+            PreparedStatement ps2 = null;
+            ResultSet rs2 = null;
+            try {
+                ps2 = conn2.prepareStatement("SHOW CREATE TABLE " + sqlConvertDto.getTableName());
+                rs2 =ps2.executeQuery();
+            }finally {
+                if (ps2 != null) {
+                    ps2.close();
+                }
+            }
+            String createSql = rs2.getString(sqlConvertDto.getTableName());
+            System.out.println(createSql);
+            GrpcMsg msg = new GrpcMsg();
+            msg.setType(CREATE);
+            msg.setOptSql(createSql);
+            msg.setTableName(sqlConvertDto.getHistoryTableName());
+            msg.setServerName(HistoryProperties.getServerName());
+            GRpcClient.getInstance().greet(msg.toJsonString());
+        }
     }
 
     /**
@@ -291,13 +312,14 @@ public class HistoryRecordUtils {
      * @param serverName
      * @param tableName
      */
-    public static void sendRpcToServer(String optSql,String serverName, String tableName){
+    public static String sendRpcToServer(String optSql,String serverName, String tableName){
         GrpcMsg msg = new GrpcMsg();
+        msg.setType(INSERT);
         msg.setOptSql(optSql);
         msg.setTableName(tableName);
         msg.setServerName(serverName);
-        logger.info("rpc client: ==> " + msg.toString());
-        GRpcClient.getInstance().greet(msg.toJsonString());
+        logger.info("发送数据: ==> " + msg.toString());
+        return GRpcClient.getInstance().greet(msg.toJsonString());
     }
 
     /**
@@ -311,18 +333,4 @@ public class HistoryRecordUtils {
         }
     }
 
-//    public static void main(String[] args) {
-//        GRpcClient client = GRpcClient.getInstance();;
-//        try {
-//            client.greet("123");
-//        }  finally {
-//            try {
-//                client.shutdown();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//
-//    }
 }

@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-net.shopin.history.HistoryTableAutoConfiguration
+net.shopin.HistoryTableAutoConfiguration
+#net.shopin.FullSqlAutoConfiguration

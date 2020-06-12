@@ -8,9 +8,30 @@ package net.shopin.grpc;
  * @version: V1.0
  */
 public class GrpcMsg {
+    /**
+     * 操作类型 使用GrpcTypeEnum
+     */
+    private GrpcTypeEnum type;
+    /**
+     * 执行sql
+     */
     private String optSql;
+    /**
+     * 表名
+     */
     private String tableName;
+    /**
+     * 服务
+     */
     private String serverName;
+
+    public GrpcTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(GrpcTypeEnum type) {
+        this.type = type;
+    }
 
     public String getOptSql() {
         return optSql;
@@ -39,13 +60,14 @@ public class GrpcMsg {
     @Override
     public String toString() {
         return "GrpcMsg{" +
-                "optSql='" + optSql + '\'' +
+                "type=" + type +
+                ", optSql='" + optSql + '\'' +
                 ", tableName='" + tableName + '\'' +
                 ", serverName='" + serverName + '\'' +
                 '}';
     }
 
     public String toJsonString(){
-        return "{\"optSql\":\"" + optSql + "\",\"tableName\":\"" + tableName + "\", \"serverName\":\"" + serverName + "\"}";
+        return "{\"type\":\"" + type + "\",\"optSql\":\"" + optSql + "\",\"tableName\":\"" + tableName + "\", \"serverName\":\"" + serverName + "\"}";
     }
 }
