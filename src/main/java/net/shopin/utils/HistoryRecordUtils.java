@@ -281,29 +281,7 @@ public class HistoryRecordUtils {
                 ps1.close();
             }
         }
-        String res = sendRpcToServer(insertSql,HistoryProperties.getServerName(),sqlConvertDto.getHistoryTableName());
-        if(CREATE.equals(res)){
-            //查询建表语句
-            Connection conn2 = stmt.getConnection();
-            PreparedStatement ps2 = null;
-            ResultSet rs2 = null;
-            try {
-                ps2 = conn2.prepareStatement("SHOW CREATE TABLE " + sqlConvertDto.getTableName());
-                rs2 =ps2.executeQuery();
-            }finally {
-                if (ps2 != null) {
-                    ps2.close();
-                }
-            }
-            String createSql = rs2.getString(sqlConvertDto.getTableName());
-            System.out.println(createSql);
-            GrpcMsg msg = new GrpcMsg();
-            msg.setType(CREATE);
-            msg.setOptSql(createSql);
-            msg.setTableName(sqlConvertDto.getHistoryTableName());
-            msg.setServerName(HistoryProperties.getServerName());
-            GRpcClient.getInstance().greet(msg.toJsonString());
-        }
+        sendRpcToServer(insertSql,HistoryProperties.getServerName(),sqlConvertDto.getHistoryTableName());
     }
 
     /**
