@@ -11,7 +11,7 @@ public class GrpcMsg {
     /**
      * 操作类型 使用GrpcTypeEnum
      */
-    private GrpcTypeEnum type;
+    private GrpcEnum type;
     /**
      * 执行sql
      */
@@ -25,11 +25,11 @@ public class GrpcMsg {
      */
     private String serverName;
 
-    public GrpcTypeEnum getType() {
+    public GrpcEnum getType() {
         return type;
     }
 
-    public void setType(GrpcTypeEnum type) {
+    public void setType(GrpcEnum type) {
         this.type = type;
     }
 

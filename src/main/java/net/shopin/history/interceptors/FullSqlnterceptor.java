@@ -45,7 +45,7 @@ public class FullSqlnterceptor implements Interceptor {
             BoundSql boundSql = mappedStatement.getBoundSql(parameter); // BoundSql就是封装myBatis最终产生的sql类
             Configuration configuration = mappedStatement.getConfiguration(); // 获取节点的配置
             String sql = getSql(configuration, boundSql); // 获取到最终的sql语句
-            System.out.println("【执行SQL】{"+sql+"}");
+//            System.out.println("【执行SQL】{"+sql+"}");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

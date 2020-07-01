@@ -42,7 +42,6 @@ public class GRpcClient {
         if(client == null){
             synchronized (HistoryTableInterceptor.class){
                 if(client == null){
-                    System.out.println("init HistoryTableInterceptor");
                     client = new GRpcClient("127.0.0.1",50051);
                 }
             }

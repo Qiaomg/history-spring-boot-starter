@@ -1,6 +1,9 @@
 package net.shopin;
 
 import net.shopin.history.interceptors.HistoryTableInterceptor;
+import net.shopin.history.properties.HistoryProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * @version: V1.0
  */
 @Configuration
+@EnableConfigurationProperties(HistoryProperties.class)
 public class HistoryTableAutoConfiguration {
     @Bean
     public HistoryTableInterceptor doHistroyInterceptor() {

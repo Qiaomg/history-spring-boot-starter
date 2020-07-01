@@ -1,13 +1,13 @@
 package net.shopin.grpc;
 
 /**
- * @title: GrpcTypeEnum
+ * @title: GrpcEnum
  * @description: Server enum
  * @author: qmg
  * @date: 2020/6/12 9:57
  * @version: V1.0
  */
-public enum GrpcTypeEnum {
+public enum GrpcEnum {
     /**
      * 成功状态
      */
@@ -15,7 +15,7 @@ public enum GrpcTypeEnum {
     /**
      * 建表
      */
-    CREATE,
+    REFRESH,
     /**
      * 增加数据
      */
