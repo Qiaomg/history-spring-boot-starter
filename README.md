@@ -1,6 +1,6 @@
 # history-spring-boot-starter
 
-####兼容计划
+#### 兼容计划
 - [x] springboot + mybatis plus + mysql 项目
 - [ ] springboot + mybatis + mysql 项目
 
@@ -8,10 +8,10 @@
     当前版本0.0.1
     数据库表中部分数据变更要求有历史及变更记录,便于数据追溯,对于此类场景不必在业务中先记录再操作.
     自定义spring-boot-starter（可插拔式组件）.
-    基于拦截器和Sql反解析实现
+    实现方式基于拦截器和Sql反解析实现
 
 
-### 2、使用  可参考history-client-demo项目配置
+### 2、使用  （参考history-client-demo）
 #### 添加pom
 ```XML
 <dependency>
